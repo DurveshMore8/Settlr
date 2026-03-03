@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { User, Mail, Lock, Coins, UserPlus, Loader2, Eye, EyeOff } from 'lucide-react';
+import Select from '../components/common/Select';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -111,17 +112,13 @@ const Register = () => {
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-slate-300 ml-1">Home Currency</label>
                             <div className="relative group">
-                                <Coins className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-purple-400 transition-colors" size={20} />
-                                <select
+                                <Select
+                                    options={currencies}
                                     value={formData.homeCurrency}
                                     onChange={(e) => setFormData({ ...formData, homeCurrency: e.target.value })}
-                                    className="w-full glass-input py-3 appearance-none"
-                                    style={{ paddingLeft: '48px' }}
-                                >
-                                    {currencies.map(c => (
-                                        <option key={c} value={c}>{c}</option>
-                                    ))}
-                                </select>
+                                    className="w-full glass-input py-3 style-padding-fix"
+                                    icon={Coins}
+                                />
                             </div>
                         </div>
 

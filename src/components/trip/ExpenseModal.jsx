@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus, Loader2, DollarSign } from 'lucide-react';
 import ModalPortal from '../common/ModalPortal';
+import Select from '../common/Select';
 
 const ExpenseModal = ({
     isOpen,
@@ -58,15 +59,12 @@ const ExpenseModal = ({
                                 </div>
                                 <div>
                                     <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500 ml-1 mb-2 block">Currency</label>
-                                    <select
+                                    <Select
+                                        options={['USD', 'EUR', 'GBP', 'INR', 'JPY', 'CAD', 'AUD']}
                                         value={expenseData.currency}
                                         onChange={(e) => setExpenseData({ ...expenseData, currency: e.target.value })}
-                                        className="w-full glass-input"
-                                    >
-                                        {['USD', 'EUR', 'GBP', 'INR', 'JPY', 'CAD', 'AUD'].map(c => (
-                                            <option key={c} value={c}>{c}</option>
-                                        ))}
-                                    </select>
+                                        className="w-full glass-input py-3 px-4"
+                                    />
                                 </div>
                             </div>
 

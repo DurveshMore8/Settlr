@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
-import { Map, Wallet, Coins, Plus, Loader2 } from 'lucide-react';
+import { Map, Wallet, Plus, Coins, Loader2, ArrowLeft } from 'lucide-react';
+import Select from '../components/common/Select';
 
 const CreateTrip = () => {
     const [formData, setFormData] = useState({
@@ -41,11 +42,13 @@ const CreateTrip = () => {
                 <p className="text-slate-400 font-medium">Set the foundation for your group adventure.</p>
             </div>
 
-            <div className="glass-card rounded-3xl p-8 md:p-10 relative overflow-hidden">
+            <div className="glass-card rounded-3xl p-8 md:p-10 relative">
                 {/* Background gradient */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-purple-600/[0.06] blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2 -z-10" />
+                <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none overflow-hidden -z-10">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-purple-600/[0.06] blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+                </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                     <div className="space-y-3">
                         <label className="text-sm font-bold text-slate-300 uppercase tracking-widest ml-1 flex items-center gap-2">
                             <Map size={14} className="text-purple-400" />
@@ -68,18 +71,12 @@ const CreateTrip = () => {
                                 Base Currency
                             </label>
                             <div className="relative group">
-                                <select
+                                <Select
+                                    options={currencies}
                                     value={formData.baseCurrency}
                                     onChange={(e) => setFormData({ ...formData, baseCurrency: e.target.value })}
-                                    className="w-full glass-input py-4 px-6 text-lg font-semibold !rounded-2xl appearance-none"
-                                >
-                                    {currencies.map(c => (
-                                        <option key={c} value={c}>{c}</option>
-                                    ))}
-                                </select>
-                                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                                    <Plus size={20} className="rotate-45" />
-                                </div>
+                                    className="w-full glass-input py-4 px-6 text-lg font-semibold !rounded-2xl"
+                                />
                             </div>
                             <p className="text-[11px] text-slate-500 font-bold ml-1 uppercase tracking-tight">
                                 All expenses convert to this for analytics
