@@ -48,8 +48,8 @@ const ExpenseList = ({ expenses, trip, isAdmin, onEdit, onDelete, activeCategory
 
     if (expenses.length === 0) {
         return (
-            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-16 text-center">
-                <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6 text-slate-700">
+            <div className="glass-card rounded-[2.5rem] p-16 text-center">
+                <div className="w-20 h-20 rounded-3xl glass flex items-center justify-center mx-auto mb-6 text-slate-600">
                     <Receipt size={40} />
                 </div>
                 <h3 className="text-2xl font-black text-white mb-2">No expenses yet</h3>
@@ -76,9 +76,9 @@ const ExpenseList = ({ expenses, trip, isAdmin, onEdit, onDelete, activeCategory
                         <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">
                             {formatGroupDate(group.date)}
                         </h3>
-                        <div className="h-px w-full bg-white/5" />
+                        <div className="h-px w-full bg-gradient-to-r from-white/[0.06] to-transparent" />
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         {group.expenses.map((expense) => (
                             <ExpenseListItem
                                 key={expense._id}

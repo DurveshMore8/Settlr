@@ -31,11 +31,13 @@ const JoinTrip = () => {
     return (
         <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6 animate-fade-in">
             <div className="relative">
-                <div className="absolute inset-0 bg-purple-500/20 blur-3xl rounded-full" />
-                <ShipWheel className="text-purple-500 animate-[spin_3s_linear_infinite] relative" size={64} />
+                <div className="absolute inset-0 bg-purple-500/20 blur-3xl rounded-full animate-pulse-glow" />
+                <div className="glass-card p-6 rounded-full relative">
+                    <ShipWheel className="text-purple-400 animate-[spin_3s_linear_infinite]" size={48} />
+                </div>
             </div>
             <div className="text-center">
-                <h2 className="text-3xl font-bold mb-2">Joining Trip...</h2>
+                <h2 className="text-3xl font-bold mb-2 text-white">Joining Trip...</h2>
                 <p className="text-slate-400 font-medium">Please wait while we set up your seat.</p>
             </div>
             <Loader2 className="animate-spin text-slate-600" size={24} />

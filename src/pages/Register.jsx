@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { User, Mail, Lock, Coins, UserPlus, Loader2 } from 'lucide-react';
+import { User, Mail, Lock, Coins, UserPlus, Loader2, Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ const Register = () => {
         homeCurrency: 'USD'
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const { register } = useAuth();
     const navigate = useNavigate();
@@ -34,16 +35,18 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 relative">
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/20 blur-[120px] rounded-full -z-10" />
+        <div className="min-h-screen bg-navy-950 flex items-center justify-center p-6 relative overflow-hidden">
+            {/* Background Orbs */}
+            <div className="absolute bottom-1/3 right-1/3 w-[500px] h-[500px] bg-indigo-600/[0.08] blur-[150px] rounded-full animate-float-slow" />
+            <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-purple-600/[0.07] blur-[120px] rounded-full animate-float-slow" style={{ animationDelay: '-10s' }} />
 
-            <div className="w-full max-w-md">
-                <Link to="/" className="inline-block mb-10 text-3xl font-black bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
+            <div className="w-full max-w-md animate-slide-up relative z-10">
+                <Link to="/" className="inline-block mb-10 text-3xl font-black bg-gradient-to-r from-purple-400 via-violet-400 to-indigo-400 bg-clip-text text-transparent">
                     Settlr
                 </Link>
 
-                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-                    <h2 className="text-3xl font-bold mb-2">Create account</h2>
+                <div className="glass-card rounded-3xl p-8">
+                    <h2 className="text-3xl font-bold mb-2 text-white">Create account</h2>
                     <p className="text-slate-400 mb-8 font-medium">Start managing your group expenses today.</p>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
@@ -55,7 +58,8 @@ const Register = () => {
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all font-medium"
+                                    className="w-full glass-input py-3"
+                                    style={{ paddingLeft: '48px' }}
                                     placeholder="John Doe"
                                     required
                                 />
@@ -70,7 +74,8 @@ const Register = () => {
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all font-medium"
+                                    className="w-full glass-input py-3"
+                                    style={{ paddingLeft: '48px' }}
                                     placeholder="name@company.com"
                                     required
                                 />
@@ -82,14 +87,24 @@ const Register = () => {
                             <div className="relative group">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-purple-400 transition-colors" size={20} />
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all font-medium"
+                                    className="w-full glass-input py-3 pr-12"
+                                    style={{ paddingLeft: '48px' }}
                                     placeholder="Min. 6 characters"
                                     required
                                     minLength={6}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-purple-400 transition-colors p-1"
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
                             </div>
                         </div>
 
@@ -100,10 +115,11 @@ const Register = () => {
                                 <select
                                     value={formData.homeCurrency}
                                     onChange={(e) => setFormData({ ...formData, homeCurrency: e.target.value })}
-                                    className="w-full bg-slate-900/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-purple-500/50 focus:ring-4 focus:ring-purple-500/10 transition-all font-medium appearance-none"
+                                    className="w-full glass-input py-3 appearance-none"
+                                    style={{ paddingLeft: '48px' }}
                                 >
                                     {currencies.map(c => (
-                                        <option key={c} value={c} className="bg-slate-900">{c}</option>
+                                        <option key={c} value={c}>{c}</option>
                                     ))}
                                 </select>
                             </div>
@@ -112,7 +128,7 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-bold py-4 rounded-xl shadow-lg shadow-purple-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-4"
+                            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-4 rounded-xl shadow-lg shadow-purple-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-4"
                         >
                             {isLoading ? <Loader2 className="animate-spin" size={20} /> : <UserPlus size={20} />}
                             Create Account
@@ -121,7 +137,7 @@ const Register = () => {
 
                     <div className="mt-8 text-center text-slate-400 font-medium">
                         Already have an account? {' '}
-                        <Link to="/login" className="text-purple-400 hover:text-purple-300 font-bold">
+                        <Link to="/login" className="text-purple-400 hover:text-purple-300 font-bold transition-colors">
                             Sign in
                         </Link>
                     </div>

@@ -33,7 +33,33 @@ function App() {
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <Toaster position="top-right" />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: 'rgba(8, 13, 36, 0.9)',
+              backdropFilter: 'blur(20px)',
+              color: '#e2e8f0',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '14px',
+              fontSize: '14px',
+              fontWeight: '500',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+            },
+            success: {
+              iconTheme: {
+                primary: '#a855f7',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
       </Router>
     </AuthProvider>
   );

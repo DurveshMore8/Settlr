@@ -19,7 +19,6 @@ import ItineraryModal from '../components/trip/ItineraryModal';
 import MemberModal from '../components/trip/MemberModal';
 import SettlementView from '../components/trip/SettlementView';
 import ConfirmationModal from '../components/common/ConfirmationModal';
-// import { CATEGORIES } from '../../../server/models/Expense'; // Removed due to import issues in Vite, using local array instead
 
 const TripDetail = () => {
     const { id } = useParams();
@@ -44,7 +43,7 @@ const TripDetail = () => {
         payer: ''
     });
     const [editingExpenseId, setEditingExpenseId] = useState(null);
-    const [activeTab, setActiveTab] = useState('expenses'); // 'expenses' or 'itinerary'
+    const [activeTab, setActiveTab] = useState('expenses');
     const [showItineraryModal, setShowItineraryModal] = useState(false);
     const [editingItineraryId, setEditingItineraryId] = useState(null);
     const [newItineraryItem, setNewItineraryItem] = useState({
@@ -63,7 +62,7 @@ const TripDetail = () => {
         title: '',
         message: '',
         onConfirm: null,
-        type: 'danger' // 'danger' or 'warning'
+        type: 'danger'
     });
 
     const triggerConfirm = (title, message, onConfirm, type = 'danger') => {
@@ -158,7 +157,6 @@ const TripDetail = () => {
             setExpenses(expenseRes.data);
             setAnalytics(analyticsRes.data);
 
-            // Initialize new expense participants to all members by default
             setNewExpense(prev => ({
                 ...prev,
                 currency: tripRes.data.baseCurrency,
@@ -285,12 +283,11 @@ const TripDetail = () => {
         );
     };
 
-
     const expenseCategories = useMemo(() => [
         'Food', 'Transport', 'Lodging', 'Activities', 'Shopping', 'General', 'Other'
     ], []);
 
-    const COLORS = ['#A855F7', '#EC4899', '#6366F1', '#10B981', '#F59E0B', '#EF4444', '#64748B'];
+    const COLORS = ['#A855F7', '#818CF8', '#6366F1', '#10B981', '#F59E0B', '#EF4444', '#64748B'];
 
     const chartData = useMemo(() => {
         if (!analytics) return [];
@@ -303,7 +300,10 @@ const TripDetail = () => {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <Loader2 className="animate-spin text-purple-500" size={40} />
+                <div className="relative">
+                    <div className="absolute inset-0 bg-purple-500/20 blur-2xl rounded-full animate-pulse-glow" />
+                    <Loader2 className="animate-spin text-purple-400 relative" size={40} />
+                </div>
                 <p className="text-slate-400 font-medium">Loading workspace...</p>
             </div>
         );
@@ -315,14 +315,14 @@ const TripDetail = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <h1 className="text-4xl font-black">{trip.name}</h1>
+                        <h1 className="text-4xl font-black text-white">{trip.name}</h1>
                         {trip.status === 'completed' && (
                             <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-500/20">
                                 <CheckCircle2 size={12} />
                                 Completed
                             </span>
                         )}
-                        <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold tracking-widest text-slate-400 uppercase">
+                        <span className="px-3 py-1 glass rounded-full text-[10px] font-bold tracking-widest text-slate-400 uppercase">
                             {trip.baseCurrency}
                         </span>
                     </div>
@@ -332,7 +332,7 @@ const TripDetail = () => {
                             <span>{trip.members.length} Members</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Wallet size={16} className="text-pink-400" />
+                            <Wallet size={16} className="text-indigo-400" />
                             <span>{trip.budgetPerPerson.toLocaleString()} {trip.baseCurrency} budget / person</span>
                         </div>
                     </div>
@@ -343,7 +343,7 @@ const TripDetail = () => {
                         <button
                             onClick={handleEndTrip}
                             disabled={isSubmitting}
-                            className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl font-bold transition-all border border-white/10"
+                            className="flex items-center gap-2 btn-ghost px-5 py-2.5 !rounded-xl text-sm"
                         >
                             {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <Flag size={18} />}
                             End Trip
@@ -351,7 +351,7 @@ const TripDetail = () => {
                     )}
                     <button
                         onClick={copyInviteLink}
-                        className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl font-bold transition-all border border-white/10"
+                        className="flex items-center gap-2 btn-ghost px-5 py-2.5 !rounded-xl text-sm"
                     >
                         <Copy size={18} />
                         Invite Friends
@@ -367,7 +367,7 @@ const TripDetail = () => {
                                     setShowItineraryModal(true);
                                 }
                             }}
-                            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-purple-600/20"
+                            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-purple-600/20 text-sm"
                         >
                             <Plus size={20} />
                             {activeTab === 'expenses' ? 'Add Expense' : 'Add Item'}
@@ -377,16 +377,16 @@ const TripDetail = () => {
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex items-center gap-1 p-1 bg-white/5 border border-white/10 rounded-2xl w-fit mb-8">
+            <div className="flex items-center gap-1 p-1 glass rounded-2xl w-fit mb-8">
                 <button
                     onClick={() => setActiveTab('expenses')}
-                    className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${activeTab === 'expenses' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'text-slate-500 hover:text-slate-300'}`}
+                    className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${activeTab === 'expenses' ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/20' : 'text-slate-500 hover:text-slate-300'}`}
                 >
                     Expenses
                 </button>
                 <button
                     onClick={() => setActiveTab('itinerary')}
-                    className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${activeTab === 'itinerary' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'text-slate-500 hover:text-slate-300'}`}
+                    className={`px-6 py-2 rounded-xl text-sm font-black transition-all ${activeTab === 'itinerary' ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/20' : 'text-slate-500 hover:text-slate-300'}`}
                 >
                     Itinerary
                 </button>
@@ -403,18 +403,18 @@ const TripDetail = () => {
                         </span>
                     )}
                 >
-                    <h3 className="text-3xl font-black">
+                    <h3 className="text-3xl font-black text-white">
                         {analytics?.totalSpent.toLocaleString()} <span className="text-sm font-medium text-slate-500">{trip.baseCurrency}</span>
                     </h3>
-                    <div className="mt-4 h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div className="mt-4 h-2 bg-white/[0.04] rounded-full overflow-hidden">
                         <div
-                            className={`h-full transition-all duration-1000 ${analytics?.totalSpent > analytics?.totalBudget ? 'bg-red-500' : 'bg-purple-500'}`}
+                            className={`h-full transition-all duration-1000 rounded-full ${analytics?.totalSpent > analytics?.totalBudget ? 'bg-gradient-to-r from-red-500 to-red-400' : 'bg-gradient-to-r from-purple-500 to-indigo-500'}`}
                             style={{ width: `${Math.min((analytics?.totalSpent / analytics?.totalBudget) * 100, 100)}%` }}
                         />
                     </div>
                 </StatCard>
 
-                <StatCard icon={PieChartIcon} title="Categories" iconColor="pink">
+                <StatCard icon={PieChartIcon} title="Categories" iconColor="indigo">
                     <div className="h-[150px]">
                         {chartData.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
@@ -433,7 +433,7 @@ const TripDetail = () => {
                                         ))}
                                     </Pie>
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px' }}
+                                        contentStyle={{ backgroundColor: '#080d24', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}
                                         itemStyle={{ color: '#fff' }}
                                     />
                                 </PieChart>
@@ -447,11 +447,11 @@ const TripDetail = () => {
                 <StatCard
                     icon={Users}
                     title="Members"
-                    iconColor="indigo"
+                    iconColor="violet"
                     topRight={isAdmin && (
                         <button
                             onClick={() => setShowMembersModal(true)}
-                            className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+                            className="text-[10px] font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors"
                         >
                             Manage
                         </button>
@@ -459,17 +459,17 @@ const TripDetail = () => {
                 >
                     <div className="mt-2 space-y-4">
                         <div className="flex items-center justify-between">
-                            <span className="text-2xl font-black">{trip.members.length}</span>
+                            <span className="text-2xl font-black text-white">{trip.members.length}</span>
                             <span className="text-[10px] font-bold text-slate-500 uppercase">Active</span>
                         </div>
                         <div className="flex -space-x-2">
                             {trip.members.slice(0, 5).map((member, i) => (
-                                <div key={member._id} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                                <div key={member._id} className="w-8 h-8 rounded-full border-2 border-navy-950 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center text-[10px] font-bold text-slate-300">
                                     {member.name.charAt(0).toUpperCase()}
                                 </div>
                             ))}
                             {trip.members.length > 5 && (
-                                <div className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-400">
+                                <div className="w-8 h-8 rounded-full border-2 border-navy-950 bg-navy-800 flex items-center justify-center text-[10px] font-bold text-slate-400">
                                     +{trip.members.length - 5}
                                 </div>
                             )}
@@ -483,22 +483,22 @@ const TripDetail = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     <div className="lg:col-span-2 space-y-8">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-2xl font-bold italic underline decoration-purple-500/50 underline-offset-8">Expenses</h2>
+                            <h2 className="text-2xl font-bold italic underline decoration-purple-500/50 underline-offset-8 text-white">Expenses</h2>
                             <button
                                 onClick={() => setShowFilters(!showFilters)}
-                                className={`p-2 rounded-lg transition-all border ${showFilters || activeCategory !== 'All' ? 'bg-purple-600/20 border-purple-500 text-purple-400' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}
+                                className={`p-2 rounded-lg transition-all border ${showFilters || activeCategory !== 'All' ? 'bg-purple-600/20 border-purple-500/50 text-purple-400' : 'glass text-slate-400 hover:bg-white/[0.06]'}`}
                             >
                                 <Filter size={18} />
                             </button>
                         </div>
 
                         {showFilters && (
-                            <div className="flex flex-wrap gap-2 p-4 bg-white/5 border border-white/10 rounded-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="flex flex-wrap gap-2 p-4 glass-card rounded-2xl animate-slide-down">
                                 {['All', ...expenseCategories].map(cat => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
-                                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${activeCategory === cat ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
+                                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${activeCategory === cat ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/20' : 'glass text-slate-400 hover:bg-white/[0.06]'}`}
                                     >
                                         {cat}
                                     </button>
@@ -523,7 +523,7 @@ const TripDetail = () => {
             ) : (
                 <div className="max-w-4xl mx-auto space-y-8">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-2xl font-bold italic underline decoration-purple-500/50 underline-offset-8">Shared Itinerary</h2>
+                        <h2 className="text-2xl font-bold italic underline decoration-purple-500/50 underline-offset-8 text-white">Shared Itinerary</h2>
                     </div>
 
                     <ItineraryTimeline
