@@ -516,7 +516,7 @@ const TripDetail = () => {
                     </div>
 
                     {/* Member Balances & Settlements */}
-                    <SettlementView trip={trip} analytics={analytics} />
+                    <SettlementView trip={trip} analytics={analytics} user={user} onRefresh={fetchTripData} />
                 </div>
             ) : (
                 <div className="max-w-4xl mx-auto space-y-8">
