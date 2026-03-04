@@ -8,9 +8,10 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import CreateTrip from './pages/CreateTrip';
+import MyTrips from './pages/MyTrips';
 import TripDetail from './pages/TripDetail';
 import JoinTrip from './pages/JoinTrip';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -26,8 +27,9 @@ function App() {
           {/* Protected App Routes */}
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/trips/new" element={<CreateTrip />} />
+            <Route path="/trips" element={<MyTrips />} />
             <Route path="/trips/:id" element={<TripDetail />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
 
           {/* Catch-all */}

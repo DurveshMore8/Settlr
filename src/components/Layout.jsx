@@ -1,15 +1,24 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, Home, PlusCircle, User as UserIcon } from 'lucide-react';
+import { LogOut, Home, MapPin, Settings, User as UserIcon } from 'lucide-react';
 
 const Layout = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogout = () => {
         logout();
         navigate('/login');
     };
+
+    const navLinks = [
+        { to: '/dashboard', label: 'Dashboard', icon: Home },
+        { to: '/trips', label: 'My Trips', icon: MapPin },
+        { to: '/settings', label: 'Settings', icon: Settings },
+    ];
+
+    const isActive = (path) => location.pathname === path;
 
     return (
         <div className="min-h-screen bg-navy-950 text-slate-100 flex flex-col relative">
@@ -29,14 +38,19 @@ const Layout = () => {
                                 Settlr
                             </Link>
                             <div className="hidden md:flex gap-1">
-                                <Link to="/dashboard" className="flex items-center gap-2 text-slate-400 hover:text-white transition-all px-4 py-2 rounded-xl hover:bg-white/[0.04] font-medium text-sm">
-                                    <Home size={16} />
-                                    Dashboard
-                                </Link>
-                                <Link to="/trips/new" className="flex items-center gap-2 text-slate-400 hover:text-white transition-all px-4 py-2 rounded-xl hover:bg-white/[0.04] font-medium text-sm">
-                                    <PlusCircle size={16} />
-                                    New Trip
-                                </Link>
+                                {navLinks.map(({ to, label, icon: Icon }) => (
+                                    <Link
+                                        key={to}
+                                        to={to}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all ${isActive(to)
+                                                ? 'text-white bg-white/[0.06]'
+                                                : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                                            }`}
+                                    >
+                                        <Icon size={16} />
+                                        {label}
+                                    </Link>
+                                ))}
                             </div>
                         </div>
 
@@ -60,13 +74,32 @@ const Layout = () => {
                 </div>
             </nav>
 
+            {/* Mobile Nav */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/[0.06] bg-navy-950/80 backdrop-blur-2xl">
+                <div className="flex justify-around py-2">
+                    {navLinks.map(({ to, label, icon: Icon }) => (
+                        <Link
+                            key={to}
+                            to={to}
+                            className={`flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${isActive(to)
+                                    ? 'text-purple-400'
+                                    : 'text-slate-500 hover:text-slate-300'
+                                }`}
+                        >
+                            <Icon size={20} />
+                            {label}
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
             {/* Main Content */}
-            <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+            <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-8">
                 <Outlet />
             </main>
 
-            {/* Footer */}
-            <footer className="border-t border-white/[0.04] py-8 mt-auto">
+            {/* Footer (desktop only) */}
+            <footer className="hidden md:block border-t border-white/[0.04] py-8 mt-auto">
                 <div className="max-w-7xl mx-auto px-4 text-center">
                     <span className="text-sm font-medium bg-gradient-to-r from-slate-500 to-slate-600 bg-clip-text text-transparent">
                         &copy; {new Date().getFullYear()} Settlr &bull; Collaborative Expense Manager
