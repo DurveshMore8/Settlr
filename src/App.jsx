@@ -21,13 +21,13 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/join/:inviteCode" element={<JoinTrip />} />
 
           {/* Protected App Routes */}
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/trips/new" element={<CreateTrip />} />
             <Route path="/trips/:id" element={<TripDetail />} />
-            <Route path="/join/:inviteCode" element={<JoinTrip />} />
           </Route>
 
           {/* Catch-all */}

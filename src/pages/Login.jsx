@@ -20,7 +20,14 @@ const Login = () => {
         try {
             await login(email, password);
             toast.success('Welcome back!');
-            navigate('/dashboard');
+            // Check for pending invite redirect
+            const pendingInvite = localStorage.getItem('pendingInviteCode');
+            if (pendingInvite) {
+                localStorage.removeItem('pendingInviteCode');
+                navigate(`/join/${pendingInvite}`);
+            } else {
+                navigate('/dashboard');
+            }
         } catch (error) {
             toast.error(error.response?.data?.message || 'Login failed');
         } finally {

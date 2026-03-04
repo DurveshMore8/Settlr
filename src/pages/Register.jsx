@@ -27,7 +27,14 @@ const Register = () => {
         try {
             await register(formData.name, formData.email, formData.password, formData.homeCurrency);
             toast.success('Account created successfully!');
-            navigate('/dashboard');
+            // Check for pending invite redirect
+            const pendingInvite = localStorage.getItem('pendingInviteCode');
+            if (pendingInvite) {
+                localStorage.removeItem('pendingInviteCode');
+                navigate(`/join/${pendingInvite}`);
+            } else {
+                navigate('/dashboard');
+            }
         } catch (error) {
             toast.error(error.response?.data?.message || 'Registration failed');
         } finally {

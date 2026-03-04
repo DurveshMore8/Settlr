@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
 import {
-    Users, Wallet, Plus, Copy,
+    Users, Wallet, Plus, UserPlus,
     Loader2, PieChart as PieChartIcon,
     TrendingUp, Filter, CheckCircle2, Flag
 } from 'lucide-react';
@@ -17,6 +17,7 @@ import ItineraryTimeline from '../components/trip/ItineraryTimeline';
 import ExpenseModal from '../components/trip/ExpenseModal';
 import ItineraryModal from '../components/trip/ItineraryModal';
 import MemberModal from '../components/trip/MemberModal';
+import InviteModal from '../components/trip/InviteModal';
 import SettlementView from '../components/trip/SettlementView';
 import ConfirmationModal from '../components/common/ConfirmationModal';
 
@@ -31,6 +32,7 @@ const TripDetail = () => {
 
     const { user } = useAuth();
     const [showMembersModal, setShowMembersModal] = useState(false);
+    const [showInviteModal, setShowInviteModal] = useState(false);
     // Modal states
     const [showExpenseModal, setShowExpenseModal] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -176,11 +178,7 @@ const TripDetail = () => {
         fetchTripData();
     }, [fetchTripData]);
 
-    const copyInviteLink = () => {
-        const link = `${window.location.origin}/join/${trip.inviteCode}`;
-        navigator.clipboard.writeText(link);
-        toast.success('Invite link copied to clipboard!');
-    };
+    // copyInviteLink replaced by InviteModal
 
     const handleAddExpense = async (e) => {
         e.preventDefault();
@@ -350,10 +348,10 @@ const TripDetail = () => {
                         </button>
                     )}
                     <button
-                        onClick={copyInviteLink}
+                        onClick={() => setShowInviteModal(true)}
                         className="flex items-center gap-2 btn-ghost px-5 py-2.5 !rounded-xl text-sm"
                     >
-                        <Copy size={18} />
+                        <UserPlus size={18} />
                         Invite Friends
                     </button>
                     {isAdmin && trip.status === 'active' && (
@@ -568,6 +566,12 @@ const TripDetail = () => {
                 types={itineraryTypes}
                 isSubmitting={isSubmitting}
                 editingId={editingItineraryId}
+            />
+
+            <InviteModal
+                isOpen={showInviteModal}
+                onClose={() => setShowInviteModal(false)}
+                trip={trip}
             />
 
             <ConfirmationModal
